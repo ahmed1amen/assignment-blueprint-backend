@@ -13,14 +13,25 @@ return new class extends Migration
     {
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id');
+            $table->string('tenant_id');
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('description')->nullable()->default(null);
+            $table->text('description')->nullable();
+            $table->unsignedTinyInteger('max_attempts')->default(1);
+            $table->unsignedTinyInteger('duration')->default(1); //(0 to 180) minutes
+            $table->enum('test_type', ['in_time', 'out_of_time'])->default('out_of_time');
+            $table->timestamp('expired_at')->default(now());
+            $table->timestamp('started_at')->default(now());
+            $table->boolean('is_published')->default(false);
+            $table->boolean('is_answers_visible')->default(false);
+            $table->boolean('is_public')->default(true);
             $table->timestamps();
+            $table->foreign('tenant_id')
+                ->references('id')
+                ->on('tenants')
+                ->onDelete('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      */

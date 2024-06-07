@@ -1,9 +1,10 @@
 <?php
-
 namespace App\Providers;
-
+use App\Scopes\UserScope;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,12 +14,12 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
-
     /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
-        //
+        Model::unguard();// to avoid mass assignment errors in development process
+        // JsonResource::withoutWrapping();
     }
 }
